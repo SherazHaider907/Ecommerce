@@ -2,7 +2,7 @@ from django.shortcuts import get_object_or_404, render,redirect
 from django.core.exceptions import ObjectDoesNotExist
 from .models import Cart, CartItem
 from store.models import Product
-from django.http import HttpResponse
+# from django.http import HttpResponse
 # Create your views here.
 def _cart_id(request):
     cart = request.session.session_key
@@ -12,10 +12,10 @@ def _cart_id(request):
     return cart
 
 def add_cart(request,product_id):
-    color = request.GET['color']
-    size = request.GET['size']
-    return HttpResponse(color + ' ' + size)
-    exit()
+    if request.method == 'POST':
+        color = request.POST['color']
+        size = request.POST['size']
+        print(color,size)
     product = Product.objects.get(id=product_id) # get the product
     try:
         cart = Cart.objects.get(cart_id=_cart_id(request)) # get the cart using the cart_id present in the session
