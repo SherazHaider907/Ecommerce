@@ -42,6 +42,6 @@ class Variation(models.Model):
     created_date       = models.DateTimeField(auto_now=True)
 
     objects = VariationManagar()
-
+    print("hi")
     def __unicode__(self):
         return self.product
