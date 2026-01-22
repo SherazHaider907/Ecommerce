@@ -7,7 +7,7 @@
 
     <div class="card mx-auto" style="max-width:520px; margin-top:40px;">
         <article class="card-body">
-
+            {% include "includes/alerts.html" %}
             <header class="mb-4">
                 <h4 class="card-title text-center">Sign up</h4>
             </header>
@@ -60,7 +60,13 @@
                         Register
                     </button>
                 </div>
-
+                {% comment %} {{ form.first_name.errors }} {% endcomment %}
+                {% comment %} {{ form.last_name.errors }} {% endcomment %}
+                {% comment %} {{ form.phone_number.errors }} {% endcomment %}
+                {% comment %} {{ form.password.errors }} {% endcomment %}
+                {% comment %} {{ form.confirm_password.errors }} {% endcomment %}
+                {{ form.email.errors }}
+                {{ form.non_field_errors }}
             </form>
         </article>
     </div>
