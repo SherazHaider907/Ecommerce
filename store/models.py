@@ -32,6 +32,7 @@ class VariationManagar(models.Manager):
 variation_category_choice = (
     ('color','color'),
     ('size','size'),
+    
 )
 
 class Variation(models.Model):
