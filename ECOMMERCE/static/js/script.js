@@ -51,8 +51,10 @@ $(document).ready(function() {
 		$('[data-toggle="tooltip"]').tooltip()
 	} // end if
 
-
-
+	//////////////////////// Auto-dismiss alerts after 5 seconds
+	$(".alert").delay(5000).slideUp(500, function() {
+		$(this).alert('close');
+	});
 
     
 }); 
