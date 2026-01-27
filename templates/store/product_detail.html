@@ -89,6 +89,7 @@
 	<form action="{% url "submit_review" single_product.id %}" method='POST'>
 		{% csrf_token %}
 		<h5>write your review</h5>
+		{{single_product.averageReview}}
 		<div>
 			<label for="">How do you rate this product?</label>
 			<br>
