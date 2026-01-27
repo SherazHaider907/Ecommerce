@@ -1,0 +1,47 @@
+/* hide radio buttons */
+.rate > input {
+    display: none;
+}
+
+.rate {
+    display: inline-block;
+    border: 0;
+}
+
+.rate > label {
+    float: right;
+    position: relative;
+}
+
+/* star */
+.rate > label:before {
+    display: inline-block;
+    font-size: 1.1rem;
+    font-family: FontAwesome;
+    content: "\f005";
+    padding: 0.3rem .2rem;
+    cursor: pointer;
+}
+
+/* half star */
+.rate > label.half:before {
+    content: "\f089";
+    position: absolute;
+    left: 0;
+}
+
+/* default color */
+.rate > label {
+    color: #ccc;
+}
+
+/* hover */
+.rate > label:hover,
+.rate > label:hover ~ label {
+    color: #ffb503;
+}
+
+/* checked */
+.rate > input:checked ~ label {
+    color: #ffb503;
+}
