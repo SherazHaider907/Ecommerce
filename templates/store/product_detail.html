@@ -126,25 +126,32 @@
 		<h3>Customer Reviews </h3>  
 		
 	</header>
-
+	{% for review in reviews %}
 	<article class="box mb-3">
 		<div class="icontext w-100">
-			<img src="{% static "./images/avatars/avatar1.jpg" %}" class="img-xs icon rounded-circle">
+			
 			<div class="text">
-				<span class="date text-muted float-md-right">24.04.2020 </span>  
-				<h6 class="mb-1">Mike John </h6>
-				
+				<span class="date text-muted float-md-right">{{ review.created_date }}</span>  
+				<h6 class="mb-1">{{ review.user.fullname }} </h6>
+<div class="rating-star">
+    <span>
+        <i class="fas fa-star{% if review.rating == 0.5 %}-half-alt{% elif review.rating < 1 %}-alt{% endif %}"></i>
+        <i class="fas fa-star{% if review.rating == 1.5 %}-half-alt{% elif review.rating < 2 %}-alt{% endif %}"></i>
+        <i class="fas fa-star{% if review.rating == 2.5 %}-half-alt{% elif review.rating < 3 %}-alt{% endif %}"></i>
+        <i class="fas fa-star{% if review.rating == 3.5 %}-half-alt{% elif review.rating < 4 %}-alt{% endif %}"></i>
+        <i class="fas fa-star{% if review.rating == 4.5 %}-half-alt{% elif review.rating < 5 %}-alt{% endif %}"></i>
+    </span>
+</div>
 			</div>
 		</div> <!-- icontext.// -->
 		<div class="mt-3">
+			<h6>{{ review.subject }}</h6>
 			<p>
-				Dummy comment Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-				tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-				quis nostrud exercitation ullamco laboris nisi ut aliquip
+				{{ review.review }}
 			</p>	
 		</div>
 	</article>
-
+	{% endfor %}
 	
 
 	</div> <!-- col.// -->

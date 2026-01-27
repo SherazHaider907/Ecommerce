@@ -45,3 +45,7 @@
 .rate > input:checked ~ label {
     color: #ffb503;
 }
+
+.rating-star i{
+    color: #ffb503 !important;
+}

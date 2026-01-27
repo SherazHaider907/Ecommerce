@@ -36,9 +36,23 @@ def product_detail(request,category_slug,product_slug ):
         in_cart=CartItem.objects.filter(cart__cart_id=_cart_id(request),product=single_product).exists()
     except Exception as e:
         raise e
+
+    # for reviewS IF THE USER HAS PURCHASED THE PRODUCT
+    # we dont create the functionality now but in future we can create it
+    # try:
+    #     orderproduct = OrderProduct.objects.filter(user=request.user,product_id=single_product.id).exists()
+    # except OrderProduct.DoesNotExist:
+    #     orderproduct = None
+
+    # Get the reviews
+    reviews = ReviewRating.objects.filter(product_id=single_product.id,status=True)
+
+
     context = {
         'single_product':single_product,
         'in_cart':in_cart, 
+        # 'orderproduct':orderproduct,
+        'reviews':reviews,
     }
     return render(request,'store/product_detail.html',context)
 
