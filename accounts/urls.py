@@ -12,5 +12,10 @@ urlpatterns = [
     path('activate/<uidb64>/<token>/', views.activate, name='activate'),
 
     # dashboard orders
-    path('my_orders/', views.my_orders, name='my_orders'),   
+    path('my_orders/', views.my_orders, name='my_orders'),
+    
+    # profile 
+    path('edit_profile/', views.edit_profile, name='edit_profile'),
+
+    path('change_password/', views.change_password, name='change_password'),
 ]
