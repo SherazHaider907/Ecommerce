@@ -1,10 +1,11 @@
+from multiprocessing import context
 from django.contrib import messages, auth
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404, redirect, render
 from accounts.models import Account, UserProfile
 from carts.models import Cart, CartItem
 from carts.views import _cart_id
-from orders.models import Order
+from orders.models import Order, OrderProduct
 from .forms import RegistrationForm, UserForm, UserProfileForm
 # Email Verification
 from django.contrib.sites.shortcuts import get_current_site
@@ -138,8 +139,10 @@ def activate(request, uidb64, token):
 def dashboard(request):
     orders = Order.objects.order_by('-created_at').filter(user_id=request.user.id,is_ordered=True)
     order_count = orders.count()
+    userprofile = UserProfile.objects.get(user_id=request.user.id)
     context = {
-        'order_count':order_count
+        'order_count':order_count,
+        'userprofile':userprofile
     }
     return render(request, 'accounts/dashboard.html',context)
 
@@ -213,6 +216,7 @@ def my_orders(request):
     }
     return render(request, 'accounts/my_orders.html', context)
 
+
 @login_required(login_url='login')
 def edit_profile(request):
     userprofile = get_object_or_404(UserProfile, user=request.user)
@@ -257,3 +261,29 @@ def change_password(request):
             messages.error(request, 'New password and confirm password does not match!')
             return redirect('change_password')
     return render(request, 'accounts/change_password.html')
+
+@login_required(login_url='login')
+def order_detail(request, order_id):
+    order = get_object_or_404(Order, order_number=order_id, user=request.user)
+    order_products = OrderProduct.objects.filter(order=order)
+    subtotal = 0
+    for item in order_products:
+        subtotal += item.product_price * item.quantity
+
+    context = {
+        'order': order,
+        'order_products': order_products,
+        'subtotal': subtotal,
+    }
+    return render(request, 'accounts/order_detail.html', context)
+
+
+# @login_required(login_url='login')
+# def order_detail(request, order_id):
+#     order_detail = OrderProduct.objects.filter(order__order_number=order_id)
+#     order = Order.objects.get(order_number=order_id)
+#     context = {
+#         'order_detail': order_detail,
+#         'order': order,
+#     }
+#     return render(request, 'accounts/order_detail.html', context)

@@ -1,0 +1,139 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="section-conten padding-y bg">
+{% include "includes/alerts.html" %}
+<div class="container">
+    <div class="row">
+        {% include "includes/dashboard_sidebar.html" %}
+        <main class="col-md-9">
+            <article class="card">
+                <header class="card-header">
+                    <strong>Order #{{ order.order_number }}</strong>
+                    <span class="float-right">
+                        {% if order.status == 'New' %}
+                            <span class="badge badge-warning">{{ order.status }}</span>
+                        {% elif order.status == 'Accepted' %}
+                            <span class="badge badge-info">{{ order.status }}</span>
+                        {% elif order.status == 'Completed' %}
+                            <span class="badge badge-success">{{ order.status }}</span>
+                        {% elif order.status == 'Cancelled' %}
+                            <span class="badge badge-danger">{{ order.status }}</span>
+                        {% endif %}
+                    </span>
+                </header>
+
+                <div class="card-body">
+                    <!-- ORDER SUMMARY -->
+                    <div class="row mb-4">
+                        <div class="col-md-6">
+                            <h5 class="mb-3">Order Information</h5>
+                            <p><strong>Order Number:</strong> {{ order.order_number }}</p>
+                            <p><strong>Order Date:</strong> {{ order.created_at|date:"d M, Y" }}</p>
+                            <p><strong>Order Status:</strong> {{ order.status }}</p>
+                            <p><strong>Order Total:</strong> ${{ order.order_total }}</p>
+                            <p><strong>Tax (2%):</strong> ${{ order.tax }}</p>
+                        </div>
+                        <div class="col-md-6">
+                            <h5 class="mb-3">Shipping Address</h5>
+                            <p><strong>{{ order.first_name }} {{ order.last_name }}</strong></p>
+                            <p>{{ order.address_line_1 }}</p>
+                            {% if order.address_line_2 %}
+                                <p>{{ order.address_line_2 }}</p>
+                            {% endif %}
+                            <p>{{ order.city }}, {{ order.state }}, {{ order.country }}</p>
+                            <p><strong>Phone:</strong> {{ order.phone }}</p>
+                            <p><strong>Email:</strong> {{ order.email }}</p>
+                        </div>
+                    </div>
+
+                    {% if order.order_note %}
+                        <div class="alert alert-info mb-4">
+                            <strong>Order Note:</strong> {{ order.order_note }}
+                        </div>
+                    {% endif %}
+
+                    <!-- ORDER PRODUCTS -->
+                    <h5 class="mb-3">Order Items</h5>
+                    <table class="table table-bordered">
+                        <thead class="bg-light">
+                            <tr>
+                                <th>Product Name</th>
+                                <th>Quantity</th>
+                                <th>Price</th>
+                                <th>Total</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% if order_products %}
+                                {% for product in order_products %}
+                                    <tr>
+                                        <td>
+                                            <strong>{{ product.product.product_name }}</strong>
+                                            {% if product.variations.all %}
+                                                <br>
+                                                <small class="text-muted">
+                                                    {% for variation in product.variations.all %}
+                                                        {{ variation.variation_category|title }}: {{ variation.variation_value }}
+                                                        {% if not forloop.last %}<br>{% endif %}
+                                                    {% endfor %}
+                                                </small>
+                                            {% endif %}
+                                        </td>
+                                        <td class="text-center">{{ product.quantity }}</td>
+                                        <td class="text-right">${{ product.product_price }}</td>
+                                        <td class="text-right"><strong>${{ product.product_price|add:product.quantity }}</strong></td>
+                                    </tr>
+                                {% endfor %}
+                            {% else %}
+                                <tr>
+                                    <td colspan="4" class="text-center text-muted">No products in this order</td>
+                                </tr>
+                            {% endif %}
+                        </tbody>
+                    </table>
+
+                    <!-- ORDER TOTALS -->
+                    <div class="row">
+                        <div class="col-md-6 offset-md-6">
+                            <table class="table table-borderless">
+                                <tr>
+                                    <td><strong>Subtotal:</strong></td>
+                                    <td class="text-right">${{ order.order_total|add:order.tax }}</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Tax (2%):</strong></td>
+                                    <td class="text-right">${{ order.tax }}</td>
+                                </tr>
+                                <tr class="border-top">
+                                    <td><h5 class="mb-0"><strong>Grand Total:</strong></h5></td>
+                                    <td class="text-right"><h5 class="mb-0"><strong>${{ order.order_total }}</strong></h5></td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- PAYMENT INFO -->
+                    {% if order.payment %}
+                        <div class="alert alert-success mt-4">
+                            <strong>Payment Status:</strong> {{ order.payment.status|upper }}
+                        </div>
+                    {% else %}
+                        <div class="alert alert-warning mt-4">
+                            <strong>Payment Status:</strong> PENDING
+                        </div>
+                    {% endif %}
+
+                    <!-- ACTIONS -->
+                    <div class="mt-4">
+                        <a href="{% url 'my_orders' %}" class="btn btn-outline-primary">
+                            <i class="fa fa-arrow-left"></i> Back to Orders
+                        </a>
+                    </div>
+                </div>
+            </article>
+        </main>
+    </div>
+</div>
+</section>
+{% endblock %}
